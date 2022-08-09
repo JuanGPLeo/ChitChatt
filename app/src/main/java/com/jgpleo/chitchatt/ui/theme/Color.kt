@@ -14,9 +14,9 @@ val ScreenBackgroundLight = Color.White
 val ScreenBackgroundDark = Color(0xFF1D1D35)
 
 val ElementsBackgroundLight = Color(0xFFEAF8F5)
-val ElementsBackgroundDark = Color(0xFF4A4AD5)
+val ElementsBackgroundDark = Color(0xFF4A4A5D)
 
-val GrayDark800 = Color(0xFF44444E)
-val GrayDark600 = Color(0xFF6E6E7E)
-val GrayDark400 = Color(0xFFB7B7BE)
-val GrayDark200 = Color(0xFFEDEDEF)
+val Gray800 = Color(0xFF44444E)
+val Gray600 = Color(0xFF6E6E7E)
+val Gray400 = Color(0xFFB7B7BE)
+val Gray200 = Color(0xFFEDEDEF)
