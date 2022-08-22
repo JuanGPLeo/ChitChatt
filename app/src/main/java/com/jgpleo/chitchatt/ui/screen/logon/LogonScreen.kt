@@ -1,5 +1,6 @@
 package com.jgpleo.chitchatt.ui.screen.logon
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +17,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.jgpleo.chitchatt.R
 import com.jgpleo.chitchatt.ui.theme.logoStyle
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun LogonScreen() {
 
@@ -26,11 +28,25 @@ fun LogonScreen() {
     ) {
         LogoAnimation()
 
-        when (currentFragment) {
-            LogonSelectedFragment.SignIn -> SignInFragment { currentFragment = it }
-            LogonSelectedFragment.SignUp -> SignupFragment { currentFragment = it }
-            LogonSelectedFragment.RestorePass -> RestorePassFragment { currentFragment = it }
+        AnimatedContent(
+            targetState = currentFragment,
+            transitionSpec = {
+                if (initialState == LogonSelectedFragment.SignIn) {
+                    slideInHorizontally { width -> width } + fadeIn() with
+                            slideOutHorizontally { width -> -width } + fadeOut()
+                } else {
+                    slideInHorizontally { width -> -width } + fadeIn() with
+                            slideOutHorizontally { width -> width } + fadeOut()
+                }
+            }
+        ) { fragment ->
+            when (fragment) {
+                LogonSelectedFragment.SignIn -> SignInFragment { currentFragment = it }
+                LogonSelectedFragment.SignUp -> SignupFragment { currentFragment = it }
+                LogonSelectedFragment.RestorePass -> RestorePassFragment { currentFragment = it }
+            }
         }
+
     }
 
 }
@@ -51,7 +67,7 @@ private fun LogoAnimation() {
         LottieAnimation(
             modifier = Modifier
                 .size(200.dp)
-                .padding(top = 24.dp),
+                .padding(top = 12.dp),
             composition = logoComposition,
             progress = animationProgress
         )

@@ -26,18 +26,18 @@ fun SignInFragment(
 
 
     Column(
-        modifier = Modifier.padding(24.dp),
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .padding(bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-
 
         Text(
             text = stringResource(R.string.login_title),
             style = titleStyle()
         )
 
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(16.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -46,7 +46,7 @@ fun SignInFragment(
             onValueChange = { phone = it }
         )
 
-        Spacer(modifier = Modifier.padding(8.dp))
+        Spacer(modifier = Modifier.padding(4.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -55,7 +55,7 @@ fun SignInFragment(
             onValueChange = { pass = it }
         )
 
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(8.dp))
 
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
@@ -64,7 +64,7 @@ fun SignInFragment(
             // TODO: onClick action
         }
 
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.padding(8.dp))
 
         Text(
             text = stringResource(id = R.string.login_forgot_password),

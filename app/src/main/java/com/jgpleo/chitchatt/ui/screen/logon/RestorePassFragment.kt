@@ -24,7 +24,9 @@ fun RestorePassFragment(
     var email by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(
-        modifier = Modifier.padding(24.dp),
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .padding(bottom = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
