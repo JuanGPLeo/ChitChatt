@@ -79,7 +79,7 @@ fun LoginScreen() {
             onValueChange = { pass = it }
         )
 
-        Spacer(modifier = Modifier.padding(12.dp))
+        Spacer(modifier = Modifier.padding(16.dp))
 
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
@@ -88,7 +88,7 @@ fun LoginScreen() {
             // TODO: onClick action
         }
 
-        Spacer(modifier = Modifier.padding(12.dp))
+        Spacer(modifier = Modifier.padding(16.dp))
 
         Text(
             text = stringResource(id = R.string.login_forgot_password),

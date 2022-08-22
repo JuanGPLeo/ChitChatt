@@ -20,5 +20,14 @@
     <string name="restore_pass_send_button">Send</string>
     <string name="restore_pass_back_login_link">Back to login</string>
 
+    <!--  Signup screen  -->
+    <string name="signup_title">Create account</string>
+    <string name="signup_subtitle">Create your account and start chatting with your friends</string>
+    <string name="signup_email_adress">Email address</string>
+    <string name="signup_pass">Password</string>
+    <string name="signup_confirm_pass">Confirm password</string>
+    <string name="signup_signup_button">Sign up</string>
+    <string name="signup_back_login_link">Back to login</string>
+
 
 </resources>

@@ -40,7 +40,7 @@ fun RestorePassScreen() {
             onValueChange = { email = it }
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
@@ -49,7 +49,7 @@ fun RestorePassScreen() {
             // TODO: request restore password and navigate to login screen
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = stringResource(id = R.string.restore_pass_back_login_link),
