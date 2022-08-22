@@ -3,10 +3,11 @@ package com.jgpleo.chitchatt.ui.component.button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,23 +19,29 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun GradientButton(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color,
     gradient: Brush,
     onClickAction: () -> Unit
 ) {
     Button(
+        modifier = Modifier
+            .height(56.dp)
+            .then(modifier),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent
         ),
         contentPadding = PaddingValues(),
-        shape = RoundedCornerShape(percent = 50),
+        shape = MaterialTheme.shapes.medium,
         onClick = { onClickAction() }
     ) {
         Box(
             modifier = Modifier
                 .background(gradient)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .height(56.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .then(modifier),
             contentAlignment = Alignment.Center
         ) {
             Text(
