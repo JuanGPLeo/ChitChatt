@@ -6,6 +6,7 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = PrimaryColor,
@@ -39,6 +40,15 @@ fun ChitChattTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         TypographyDark
     } else {
         TypographyLight
+    }
+
+    val systemUiController = rememberSystemUiController()
+    if (darkTheme) {
+        systemUiController.setSystemBarsColor(color = ScreenBackgroundDark)
+        systemUiController.setNavigationBarColor(color = ScreenBackgroundDark)
+    } else {
+        systemUiController.setSystemBarsColor(color = Color.White)
+        systemUiController.setNavigationBarColor(color = Color.White)
     }
 
     MaterialTheme(
