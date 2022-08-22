@@ -1,4 +1,4 @@
-package com.jgpleo.chitchatt.ui.screen
+package com.jgpleo.chitchatt.ui.screen.logon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,9 @@ import com.jgpleo.chitchatt.ui.theme.subtitleStyle
 import com.jgpleo.chitchatt.ui.theme.titleStyle
 
 @Composable
-fun SignupScreen() {
+fun SignupFragment(
+    onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
+) {
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var pass by remember { mutableStateOf(TextFieldValue("")) }
@@ -80,7 +82,7 @@ fun SignupScreen() {
             text = stringResource(id = R.string.signup_back_login_link),
             style = linkStyle(),
             modifier = Modifier.clickable {
-                // TODO: navigate to login screen
+                onCurrentFragmentChange(LogonSelectedFragment.SignIn)
             }
         )
 
@@ -89,6 +91,6 @@ fun SignupScreen() {
 
 @Preview
 @Composable
-fun SignupScreenPreview() {
-    SignupScreen()
+private fun SignupFragmentPreview() {
+    SignupFragment {}
 }

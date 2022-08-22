@@ -1,5 +1,6 @@
-package com.jgpleo.chitchatt.ui.screen
+package com.jgpleo.chitchatt.ui.screen.logon
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -16,7 +17,9 @@ import com.jgpleo.chitchatt.ui.theme.linkStyle
 import com.jgpleo.chitchatt.ui.theme.titleStyle
 
 @Composable
-fun RestorePassScreen() {
+fun RestorePassFragment(
+    onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
+) {
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -47,19 +50,23 @@ fun RestorePassScreen() {
             text = stringResource(id = R.string.restore_pass_send_button)
         ) {
             // TODO: request restore password and navigate to login screen
+            onCurrentFragmentChange(LogonSelectedFragment.SignIn)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = stringResource(id = R.string.restore_pass_back_login_link),
-            style = linkStyle()
+            style = linkStyle(),
+            modifier = Modifier.clickable {
+                onCurrentFragmentChange(LogonSelectedFragment.SignIn)
+            }
         )
     }
 }
 
 @Preview
 @Composable
-fun RestorePassScreenPreview() {
-    RestorePassScreen()
+private fun RestorePassFragmentPreview() {
+    RestorePassFragment {}
 }
