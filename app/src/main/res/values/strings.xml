@@ -13,5 +13,12 @@
     <!--  Login screen accessibility  -->
     <string name="login_logo_content_description">Chit Chat logo</string>
 
+    <!--  Restore pass screen  -->
+    <string name="restore_pass_title">Restore password</string>
+    <string name="restore_pass_subtitle">Enter your email to restore the password</string>
+    <string name="restore_pass_email_address">Email address</string>
+    <string name="restore_pass_send_button">Send</string>
+    <string name="restore_pass_back_login_link">Back to login</string>
+
 
 </resources>

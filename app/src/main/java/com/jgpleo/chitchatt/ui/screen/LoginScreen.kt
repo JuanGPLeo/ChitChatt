@@ -1,5 +1,6 @@
 package com.jgpleo.chitchatt.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -91,7 +92,10 @@ fun LoginScreen() {
 
         Text(
             text = stringResource(id = R.string.login_forgot_password),
-            style = linkStyle()
+            style = linkStyle(),
+            modifier = Modifier.clickable {
+                // TODO: navigate to recover password screen
+            }
         )
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -99,9 +103,13 @@ fun LoginScreen() {
         Row {
             Text(text = stringResource(id = R.string.login_register))
             Text(
-                modifier = Modifier.padding(start = 4.dp),
                 text = stringResource(id = R.string.login_register_link),
-                style = linkStyle()
+                style = linkStyle(),
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .clickable {
+                        // TODO: navigate to register screen
+                    }
             )
         }
     }
