@@ -93,3 +93,11 @@ fun linkStyle() = MaterialTheme.typography.body2
 
 @Composable
 fun captionStyle() = MaterialTheme.typography.caption
+
+@Composable
+fun logoStyle() = TextStyle(
+    fontFamily = InterFontFamily,
+    fontWeight = FontWeight.Bold,
+    fontSize = 32.sp,
+    color = PrimaryColor
+)

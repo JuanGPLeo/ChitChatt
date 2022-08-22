@@ -17,6 +17,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.jgpleo.chitchatt.R
 import com.jgpleo.chitchatt.ui.component.button.PrimaryButton
 import com.jgpleo.chitchatt.ui.theme.linkStyle
+import com.jgpleo.chitchatt.ui.theme.logoStyle
 import com.jgpleo.chitchatt.ui.theme.titleStyle
 
 @Composable
@@ -34,11 +35,25 @@ fun LoginScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        LottieAnimation(
-            modifier = Modifier.size(200.dp),
-            composition = logoComposition,
-            progress = animationProgress
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
+                .padding(top = 64.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            LottieAnimation(
+                modifier = Modifier
+                    .size(200.dp)
+                    .padding(top = 24.dp),
+                composition = logoComposition,
+                progress = animationProgress
+            )
+            Text(
+                text = stringResource(id = R.string.app_name),
+                style = logoStyle()
+            )
+        }
 
         Text(
             text = stringResource(R.string.login_title),
@@ -74,7 +89,10 @@ fun LoginScreen() {
 
         Spacer(modifier = Modifier.padding(12.dp))
 
-        Text(text = stringResource(id = R.string.login_forgot_password))
+        Text(
+            text = stringResource(id = R.string.login_forgot_password),
+            style = linkStyle()
+        )
 
         Spacer(modifier = Modifier.padding(8.dp))
 
