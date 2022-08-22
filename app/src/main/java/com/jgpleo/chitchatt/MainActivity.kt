@@ -6,10 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.jgpleo.chitchatt.ui.screen.LoginScreen
 import com.jgpleo.chitchatt.ui.theme.ChitChattTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,22 +20,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    LoginScreen()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ChitChattTheme {
-        Greeting("Android")
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultPreview() {
+//    ChitChattTheme {
+//
+//    }
+//}

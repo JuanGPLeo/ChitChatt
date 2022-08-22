@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">ChitChatt</string>
+
+    <!--  Login screen  -->
+    <string name="login_title">Sign in</string>
+    <string name="login_phone">Phone</string>
+    <string name="login_pass">Password</string>
+    <string name="login_button">Sign in</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="login_register">Don\'t have an account?</string>
+    <string name="login_register_link">Sign Up</string>
+
+    <!--  Login screen accessibility  -->
+    <string name="login_logo_content_description">Chit Chat logo</string>
+
+
 </resources>
