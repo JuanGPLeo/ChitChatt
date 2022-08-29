@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.jgpleo.chitchatt.ui.screen.logon
 
 import androidx.compose.foundation.clickable
@@ -8,7 +10,10 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -28,6 +33,8 @@ fun SignupFragment(
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var pass by remember { mutableStateOf(TextFieldValue("")) }
     var confirmPass by remember { mutableStateOf(TextFieldValue("")) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -73,7 +80,7 @@ fun SignupFragment(
             value = confirmPass,
             onValueChange = { confirmPass = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { createAccountAction() }
+            keyboardActions = KeyboardActions { createAccountAction(keyboardController) }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -82,7 +89,7 @@ fun SignupFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.signup_signup_button)
         ) {
-            createAccountAction()
+            createAccountAction(keyboardController)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -98,9 +105,10 @@ fun SignupFragment(
     }
 }
 
-private fun createAccountAction() {
+private fun createAccountAction(keyboardController: SoftwareKeyboardController?) {
     // TODO: create account here
     // Request create account and auto login on response
+    keyboardController?.hide()
 }
 
 @Preview(showBackground = true)

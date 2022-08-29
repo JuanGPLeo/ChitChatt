@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.jgpleo.chitchatt.ui.screen.logon
 
 import androidx.compose.foundation.clickable
@@ -7,11 +9,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
@@ -37,6 +42,8 @@ fun SignInFragment(
     var passFocused by remember { mutableStateOf(false) }
     var showingPass by remember { mutableStateOf(false) }
     val passFocusRequester = remember { FocusRequester() }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -116,7 +123,7 @@ fun SignInFragment(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { signInAction() },
+            keyboardActions = KeyboardActions { signInAction(keyboardController) },
             onValueChange = { pass = it }
         )
 
@@ -126,7 +133,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction()
+            signInAction(keyboardController)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -175,9 +182,10 @@ private fun getTintForEyeIcon(
     }
 }
 
-private fun signInAction() {
+private fun signInAction(keyboardController: SoftwareKeyboardController?) {
     // TODO: signIn action here
     println("Hello world!!")
+    keyboardController?.hide()
 }
 
 @Preview(showBackground = true)

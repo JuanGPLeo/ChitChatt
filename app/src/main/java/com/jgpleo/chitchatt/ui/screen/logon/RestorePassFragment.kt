@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.jgpleo.chitchatt.ui.screen.logon
 
 import androidx.compose.foundation.clickable
@@ -8,7 +10,10 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -25,6 +30,8 @@ fun RestorePassFragment(
 ) {
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -47,7 +54,12 @@ fun RestorePassFragment(
             value = email,
             onValueChange = { email = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { restorePasswordAction(onCurrentFragmentChange) }
+            keyboardActions = KeyboardActions {
+                restorePasswordAction(
+                    keyboardController,
+                    onCurrentFragmentChange
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -56,7 +68,7 @@ fun RestorePassFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.restore_pass_send_button)
         ) {
-            restorePasswordAction(onCurrentFragmentChange)
+            restorePasswordAction(keyboardController, onCurrentFragmentChange)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -71,9 +83,13 @@ fun RestorePassFragment(
     }
 }
 
-private fun restorePasswordAction(onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit) {
+private fun restorePasswordAction(
+    keyboardController: SoftwareKeyboardController?,
+    onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
+) {
     // TODO: restore password action here
     // request restore password and navigate to login screen
+    keyboardController?.hide()
     onCurrentFragmentChange(LogonSelectedFragment.SignIn)
 }
 
