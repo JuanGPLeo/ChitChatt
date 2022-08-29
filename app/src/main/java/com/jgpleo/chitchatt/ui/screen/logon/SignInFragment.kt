@@ -19,6 +19,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jgpleo.chitchatt.R
 import com.jgpleo.chitchatt.ui.component.button.PrimaryButton
 import com.jgpleo.chitchatt.ui.theme.PrimaryColor
@@ -134,7 +136,9 @@ fun SignInFragment(
 
         Spacer(modifier = Modifier.padding(8.dp))
 
-        Row {
+        FlowRow(
+            mainAxisAlignment = MainAxisAlignment.Center
+        ) {
             Text(text = stringResource(id = R.string.login_register))
             Text(
                 text = stringResource(id = R.string.login_register_link),
