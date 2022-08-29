@@ -1,11 +1,11 @@
-package com.jgpleo.chitchatt.ui.component.button
+package com.jgpleo.ui_common.component.button
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
-import com.jgpleo.chitchatt.ui.theme.PrimaryColor
-import com.jgpleo.chitchatt.ui.theme.PrimaryColorVariant
+import com.jgpleo.ui_common.theme.PrimaryColor
+import com.jgpleo.ui_common.theme.PrimaryColorVariant
 
 @Composable
 fun SecondaryButton(

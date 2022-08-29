@@ -20,10 +20,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jgpleo.chitchatt.R
-import com.jgpleo.chitchatt.ui.component.button.PrimaryButton
-import com.jgpleo.chitchatt.ui.theme.linkStyle
-import com.jgpleo.chitchatt.ui.theme.subtitleStyle
-import com.jgpleo.chitchatt.ui.theme.titleStyle
+import com.jgpleo.ui_common.component.button.PrimaryButton
+import com.jgpleo.ui_common.theme.linkStyle
+import com.jgpleo.ui_common.theme.subtitleStyle
+import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
 fun SignupFragment(

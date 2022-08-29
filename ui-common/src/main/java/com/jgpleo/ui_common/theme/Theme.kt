@@ -1,4 +1,4 @@
-package com.jgpleo.chitchatt.ui.theme
+package com.jgpleo.ui_common.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

@@ -15,7 +15,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.jgpleo.chitchatt.R
-import com.jgpleo.chitchatt.ui.theme.logoStyle
+import com.jgpleo.ui_common.theme.logoStyle
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.jgpleo.chitchatt.ui.theme
+package com.jgpleo.ui_common.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.jgpleo.chitchatt.R
+import com.jgpleo.ui_common.R
 
 private val InterFontFamily = FontFamily(
     Font(R.font.inter_regular, FontWeight.Normal),
