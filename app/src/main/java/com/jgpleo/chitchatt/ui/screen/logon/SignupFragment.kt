@@ -46,7 +46,7 @@ fun SignupFragment(
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = stringResource(id = R.string.signup_email_adress)) },
+            label = { Text(text = stringResource(id = R.string.signup_email_address)) },
             value = email,
             onValueChange = { email = it }
         )
