@@ -115,12 +115,8 @@ fun SignInFragment(
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions {
-                signInAction()
-            },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions { signInAction() },
             onValueChange = { pass = it }
         )
 
