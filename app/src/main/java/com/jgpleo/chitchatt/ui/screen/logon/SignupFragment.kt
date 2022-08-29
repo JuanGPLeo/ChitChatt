@@ -91,7 +91,7 @@ fun SignupFragment(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun SignupFragmentPreview() {
     SignupFragment {}

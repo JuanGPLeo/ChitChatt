@@ -2,6 +2,7 @@ package com.jgpleo.chitchatt.ui.screen.logon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -100,21 +101,26 @@ fun SignInFragment(
                 )
             },
             trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_eye),
-                    contentDescription = stringResource(
-                        id = R.string.login_eye_icon_content_description
-                    ),
-                    tint = getTintForEyeIcon(pass.text.isNotEmpty(), showingPass, passFocused),
-                    modifier = Modifier.clickable {
-                        showingPass = !showingPass
-                        passFocusRequester.requestFocus()
-                    }
-                )
+                if (pass.text.isNotEmpty()) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_eye),
+                        contentDescription = stringResource(
+                            id = R.string.login_eye_icon_content_description
+                        ),
+                        tint = getTintForEyeIcon(pass.text.isNotEmpty(), showingPass, passFocused),
+                        modifier = Modifier.clickable {
+                            showingPass = !showingPass
+                            passFocusRequester.requestFocus()
+                        }
+                    )
+                }
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
             ),
+            keyboardActions = KeyboardActions {
+                signInAction()
+            },
             onValueChange = { pass = it }
         )
 
@@ -124,7 +130,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            // TODO: onClick action
+            signInAction()
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -171,6 +177,11 @@ private fun getTintForEyeIcon(
     } else {
         Color.Transparent
     }
+}
+
+private fun signInAction() {
+    // TODO: signIn action here
+    println("Hello world!!")
 }
 
 @Preview(showBackground = true)
