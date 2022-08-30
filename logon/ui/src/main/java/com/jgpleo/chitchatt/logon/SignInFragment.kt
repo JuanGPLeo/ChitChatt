@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.jgpleo.chitchatt.ui.screen.logon
+package com.jgpleo.chitchatt.logon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import com.jgpleo.chitchatt.R
+import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
 import com.jgpleo.ui_common.theme.PrimaryColor
 import com.jgpleo.ui_common.theme.linkStyle

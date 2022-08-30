@@ -1,4 +1,4 @@
-package com.jgpleo.chitchatt.ui.screen.logon
+package com.jgpleo.chitchatt.logon
 
 enum class LogonSelectedFragment {
     SignIn,

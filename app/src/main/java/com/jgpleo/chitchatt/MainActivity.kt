@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.jgpleo.chitchatt.ui.screen.logon.LogonScreen
+import com.jgpleo.chitchatt.logon.LogonScreen
 import com.jgpleo.ui_common.theme.ChitChattTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.jgpleo.chitchatt.ui.screen.logon
+package com.jgpleo.chitchatt.logon
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,17 +19,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jgpleo.chitchatt.R
+import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
 import com.jgpleo.ui_common.theme.linkStyle
+import com.jgpleo.ui_common.theme.subtitleStyle
 import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
-fun RestorePassFragment(
+fun SignupFragment(
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
+    var pass by remember { mutableStateOf(TextFieldValue("")) }
+    var confirmPass by remember { mutableStateOf(TextFieldValue("")) }
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -40,61 +43,76 @@ fun RestorePassFragment(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
-            text = stringResource(id = R.string.restore_pass_title),
+            text = stringResource(id = R.string.signup_title),
             style = titleStyle()
         )
 
-        Text(text = stringResource(id = R.string.restore_pass_subtitle))
+        Text(
+            text = stringResource(id = R.string.signup_subtitle),
+            style = subtitleStyle()
+        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            label = { Text(text = stringResource(id = R.string.restore_pass_email_address)) },
+            label = { Text(text = stringResource(id = R.string.signup_email_address)) },
             value = email,
             onValueChange = { email = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(text = stringResource(id = R.string.signup_pass)) },
+            value = pass,
+            onValueChange = { pass = it },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text(text = stringResource(id = R.string.signup_confirm_pass)) },
+            value = confirmPass,
+            onValueChange = { confirmPass = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions {
-                restorePasswordAction(
-                    keyboardController,
-                    onCurrentFragmentChange
-                )
-            }
+            keyboardActions = KeyboardActions { createAccountAction(keyboardController) }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.restore_pass_send_button)
+            text = stringResource(id = R.string.signup_signup_button)
         ) {
-            restorePasswordAction(keyboardController, onCurrentFragmentChange)
+            createAccountAction(keyboardController)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = stringResource(id = R.string.restore_pass_back_login_link),
+            text = stringResource(id = R.string.signup_back_login_link),
             style = linkStyle(),
             modifier = Modifier.clickable {
                 onCurrentFragmentChange(LogonSelectedFragment.SignIn)
             }
         )
+
     }
 }
 
-private fun restorePasswordAction(
-    keyboardController: SoftwareKeyboardController?,
-    onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
-) {
-    // TODO: restore password action here
-    // request restore password and navigate to login screen
+private fun createAccountAction(keyboardController: SoftwareKeyboardController?) {
+    // TODO: create account here
+    // Request create account and auto login on response
     keyboardController?.hide()
-    onCurrentFragmentChange(LogonSelectedFragment.SignIn)
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun RestorePassFragmentPreview() {
-    RestorePassFragment {}
+private fun SignupFragmentPreview() {
+    SignupFragment {}
 }
