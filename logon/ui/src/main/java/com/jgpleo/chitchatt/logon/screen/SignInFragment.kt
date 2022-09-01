@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.jgpleo.chitchatt.logon.ui.R
@@ -32,6 +33,7 @@ import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
 fun SignInFragment(
+    viewModel: SignInViewModel = viewModel(),
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
 
@@ -123,7 +125,7 @@ fun SignInFragment(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { signInAction(keyboardController) },
+            keyboardActions = KeyboardActions { signInAction(keyboardController, viewModel) },
             onValueChange = { pass = it }
         )
 
@@ -133,7 +135,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction(keyboardController)
+            signInAction(keyboardController, viewModel)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -182,9 +184,12 @@ private fun getTintForEyeIcon(
     }
 }
 
-private fun signInAction(keyboardController: SoftwareKeyboardController?) {
+private fun signInAction(
+    keyboardController: SoftwareKeyboardController?,
+    viewModel: SignInViewModel
+) {
     // TODO: signIn action here
-    println("Hello world!!")
+    viewModel.helloWorldTest()
     keyboardController?.hide()
 }
 
