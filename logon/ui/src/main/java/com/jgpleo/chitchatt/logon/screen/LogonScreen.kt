@@ -1,4 +1,4 @@
-package com.jgpleo.chitchatt.logon
+package com.jgpleo.chitchatt.logon.screen
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*

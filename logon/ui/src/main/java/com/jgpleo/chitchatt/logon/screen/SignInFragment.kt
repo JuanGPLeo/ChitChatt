@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalComposeUiApi::class)
 
-package com.jgpleo.chitchatt.logon
+package com.jgpleo.chitchatt.logon.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
