@@ -6,8 +6,11 @@ pluginManagement {
     }
     resolutionStrategy {
         eachPlugin {
-            if( requested.id.id == 'dagger.hilt.android.plugin') {
+            if (requested.id.id == 'dagger.hilt.android.plugin') {
                 useModule("com.google.dagger:hilt-android-gradle-plugin:2.42")
+            }
+            if (requested.id.id == 'com.google.gms.google-services') {
+                useModule("com.google.gms:google-services:4.3.13")
             }
         }
     }
