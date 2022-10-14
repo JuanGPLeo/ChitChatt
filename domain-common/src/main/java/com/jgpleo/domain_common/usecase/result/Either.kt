@@ -9,11 +9,11 @@ sealed class Either<out T, out E> {
     data class Failure<out E>(val error: E) : Either<Nothing, E>()
 }
 
-fun resultEmpty() = Either.Success(DomainSuccess.EmptyResult)
+fun eitherSuccessEmpty() = Either.Success(DomainSuccess.EmptyResult)
 
-fun <T> resultSuccess(data: T) = Either.Success(data)
+fun <T> eitherSuccess(data: T) = Either.Success(data)
 
-fun <E> resultFailure(error: E) = Either.Failure(error)
+fun <E> eitherFailure(error: E) = Either.Failure(error)
 
 @OptIn(ExperimentalContracts::class)
 inline fun <T, E> Either<T, E>.onSuccess(action: (T) -> Unit): Either<T, E> {

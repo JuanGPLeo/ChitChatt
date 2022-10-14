@@ -16,13 +16,7 @@ class RestorePassUseCase @Inject constructor(
 
     override fun prepareFlow(input: EmailRestorePass): Flow<Either<DomainSuccess, DomainError>> =
         flow {
-            repository.restorePass(input)
-                .onSuccess() {
-                    // TODO: pending success action
-                }
-                .onFailure {
-                    // TODO: pending failure action
-                }
+            repository.restorePass(input).onSuccess { emit(eitherSuccessEmpty()) }
         }
 
 }

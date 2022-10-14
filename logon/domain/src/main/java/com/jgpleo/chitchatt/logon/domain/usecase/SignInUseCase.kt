@@ -1,5 +1,6 @@
 package com.jgpleo.chitchatt.logon.domain.usecase
 
+import com.jgpleo.chitchatt.logon.domain.error.LogonError
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
 import com.jgpleo.chitchatt.logon.domain.repository.LogonRepository
 import com.jgpleo.domain_common.usecase.UseCase
@@ -18,10 +19,14 @@ class SignInUseCase @Inject constructor(
         flow {
             repository.signIn(input)
                 .onSuccess {
-                    // TODO: pending success action
+                    if (it.isValid()) {
+                        emit(eitherSuccess(DomainSuccess.Result(it)))
+                    } else {
+                        emit(eitherFailure(LogonError.InvalidUser))
+                    }
                 }
                 .onFailure {
-                    // TODO: pending failure action
+                    emit(eitherFailure(LogonError.InvalidUser))
                 }
         }
 
