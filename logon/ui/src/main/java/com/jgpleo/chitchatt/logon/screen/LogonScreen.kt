@@ -14,6 +14,9 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.jgpleo.chitchatt.logon.screen.restorepass.RestorePassFragment
+import com.jgpleo.chitchatt.logon.screen.signin.SignInFragment
+import com.jgpleo.chitchatt.logon.screen.signup.SignupFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.theme.logoStyle
 

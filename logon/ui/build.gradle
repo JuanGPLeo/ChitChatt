@@ -7,6 +7,7 @@ plugins {
 }
 
 android {
+    namespace 'com.jgpleo.chitchatt.logon.ui'
     compileSdk 33
 
     defaultConfig {
@@ -36,12 +37,12 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
-    namespace 'com.jgpleo.chitchatt.logon.ui'
 }
 
 dependencies {
 
     implementation project(":ui-common")
+    implementation project(":logon:domain")
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'

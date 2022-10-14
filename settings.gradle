@@ -25,5 +25,8 @@ dependencyResolutionManagement {
 rootProject.name = "ChitChatt"
 include ':app'
 include ':ui-common'
+include ':domain-common'
+
 include ':logon:ui'
 include ':logon:domain'
+include ':logon:data'
