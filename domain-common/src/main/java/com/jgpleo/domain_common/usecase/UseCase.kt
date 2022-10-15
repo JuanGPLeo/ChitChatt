@@ -2,13 +2,12 @@ package com.jgpleo.domain_common.usecase
 
 import com.jgpleo.domain_common.usecase.dispatcher.DispatcherProvider
 import com.jgpleo.domain_common.usecase.result.DomainError
-import com.jgpleo.domain_common.usecase.result.DomainSuccess
 import com.jgpleo.domain_common.usecase.result.Either
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlin.coroutines.CoroutineContext
 
-abstract class UseCase<T>(
+abstract class UseCase<T, M>(
     protected open val dispatcherProvider: DispatcherProvider
 ) {
 
@@ -16,6 +15,6 @@ abstract class UseCase<T>(
 
     fun prepare(input: T) = prepareFlow(input).flowOn(dispatcher())
 
-    protected abstract fun prepareFlow(input: T): Flow<Either<DomainSuccess, DomainError>>
+    protected abstract fun prepareFlow(input: T): Flow<Either<M, DomainError>>
 
 }

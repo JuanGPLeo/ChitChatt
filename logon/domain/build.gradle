@@ -9,7 +9,7 @@ java {
 }
 
 dependencies {
-    implementation project(":domain-common")
+    api project(":domain-common")
 
     implementation "javax.inject:javax.inject:1"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")

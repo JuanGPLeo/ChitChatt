@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jgpleo.chitchatt.logon.screen.LogonSelectedFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
@@ -27,6 +28,7 @@ import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
 fun RestorePassFragment(
+    viewModel: RestorePassViewModel = viewModel(),
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
 
@@ -56,10 +58,7 @@ fun RestorePassFragment(
             onValueChange = { email = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions {
-                restorePasswordAction(
-                    keyboardController,
-                    onCurrentFragmentChange
-                )
+                restorePasswordAction(viewModel, email.toString(), keyboardController, onCurrentFragmentChange)
             }
         )
 
@@ -69,7 +68,7 @@ fun RestorePassFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.restore_pass_send_button)
         ) {
-            restorePasswordAction(keyboardController, onCurrentFragmentChange)
+            restorePasswordAction(viewModel, email.toString(), keyboardController, onCurrentFragmentChange)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -85,13 +84,14 @@ fun RestorePassFragment(
 }
 
 private fun restorePasswordAction(
+    viewModel: RestorePassViewModel,
+    email: String,
     keyboardController: SoftwareKeyboardController?,
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
-    // TODO: restore password action here
-    // request restore password and navigate to login screen
+    viewModel.restorePass(email)
     keyboardController?.hide()
-    onCurrentFragmentChange(LogonSelectedFragment.SignIn)
+//    onCurrentFragmentChange(LogonSelectedFragment.SignIn)
 }
 
 @Preview(showBackground = true)

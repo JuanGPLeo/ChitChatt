@@ -12,9 +12,9 @@ import javax.inject.Inject
 class RestorePassUseCase @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val repository: LogonRepository
-) : UseCase<EmailRestorePass>(dispatcherProvider) {
+) : UseCase<EmailRestorePass, DomainSuccess.EmptyResult>(dispatcherProvider) {
 
-    override fun prepareFlow(input: EmailRestorePass): Flow<Either<DomainSuccess, DomainError>> =
+    override fun prepareFlow(input: EmailRestorePass): Flow<Either<DomainSuccess.EmptyResult, DomainError>> =
         flow {
             repository.restorePass(input).onSuccess { emit(eitherSuccessEmpty()) }
         }

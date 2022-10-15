@@ -19,6 +19,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jgpleo.chitchatt.logon.screen.LogonSelectedFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
@@ -28,6 +29,7 @@ import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
 fun SignupFragment(
+    viewModel: SignupViewModel = viewModel(),
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
 
@@ -81,7 +83,15 @@ fun SignupFragment(
             value = confirmPass,
             onValueChange = { confirmPass = it },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { createAccountAction(keyboardController) }
+            keyboardActions = KeyboardActions {
+                createAccountAction(
+                    viewModel,
+                    email.toString(),
+                    pass.toString(),
+                    confirmPass.toString(),
+                    keyboardController
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -90,7 +100,13 @@ fun SignupFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.signup_signup_button)
         ) {
-            createAccountAction(keyboardController)
+            createAccountAction(
+                viewModel,
+                email.toString(),
+                pass.toString(),
+                confirmPass.toString(),
+                keyboardController
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -100,16 +116,22 @@ fun SignupFragment(
             style = linkStyle(),
             modifier = Modifier.clickable {
                 onCurrentFragmentChange(LogonSelectedFragment.SignIn)
+                viewModel.dispose()
             }
         )
 
     }
 }
 
-private fun createAccountAction(keyboardController: SoftwareKeyboardController?) {
-    // TODO: create account here
-    // Request create account and auto login on response
+private fun createAccountAction(
+    viewModel: SignupViewModel,
+    email: String,
+    pass: String,
+    confirmPass: String,
+    keyboardController: SoftwareKeyboardController?
+) {
     keyboardController?.hide()
+    viewModel.register(email, pass, confirmPass)
 }
 
 @Preview(showBackground = true)

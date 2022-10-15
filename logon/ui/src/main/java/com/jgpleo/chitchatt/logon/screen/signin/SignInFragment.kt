@@ -126,7 +126,14 @@ fun SignInFragment(
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions { signInAction(keyboardController, viewModel) },
+            keyboardActions = KeyboardActions {
+                signInAction(
+                    viewModel,
+                    email.toString(),
+                    pass.toString(),
+                    keyboardController
+                )
+            },
             onValueChange = { pass = it }
         )
 
@@ -136,7 +143,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction(keyboardController, viewModel)
+            signInAction(viewModel, email.toString(), pass.toString(), keyboardController)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -146,6 +153,7 @@ fun SignInFragment(
             style = linkStyle(),
             modifier = Modifier.clickable {
                 onCurrentFragmentChange(LogonSelectedFragment.RestorePass)
+                viewModel.dispose()
             }
         )
 
@@ -162,6 +170,7 @@ fun SignInFragment(
                     .padding(start = 4.dp)
                     .clickable {
                         onCurrentFragmentChange(LogonSelectedFragment.SignUp)
+                        viewModel.dispose()
                     }
             )
         }
@@ -186,11 +195,12 @@ private fun getTintForEyeIcon(
 }
 
 private fun signInAction(
-    keyboardController: SoftwareKeyboardController?,
-    viewModel: SignInViewModel
+    viewModel: SignInViewModel,
+    email: String,
+    pass: String,
+    keyboardController: SoftwareKeyboardController?
 ) {
-    // TODO: signIn action here
-    viewModel.helloWorldTest()
+    viewModel.login(email, pass)
     keyboardController?.hide()
 }
 

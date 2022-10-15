@@ -2,6 +2,7 @@ package com.jgpleo.chitchatt.logon.domain.usecase
 
 import com.jgpleo.chitchatt.logon.domain.error.LogonError
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
+import com.jgpleo.chitchatt.logon.domain.model.UserData
 import com.jgpleo.chitchatt.logon.domain.repository.LogonRepository
 import com.jgpleo.domain_common.usecase.UseCase
 import com.jgpleo.domain_common.usecase.dispatcher.DispatcherProvider
@@ -13,14 +14,14 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(
     dispatcherProvider: DispatcherProvider,
     private val repository: LogonRepository
-) : UseCase<UserCredentials>(dispatcherProvider) {
+) : UseCase<UserCredentials, UserData>(dispatcherProvider) {
 
-    override fun prepareFlow(input: UserCredentials): Flow<Either<DomainSuccess, DomainError>> =
+    override fun prepareFlow(input: UserCredentials): Flow<Either<UserData, DomainError>> =
         flow {
             repository.signUp(input)
                 .onSuccess {
                     if (it.isValid()) {
-                        emit(eitherSuccess(DomainSuccess.Result(it)))
+                        emit(eitherSuccess(it))
                     } else {
                         emit(eitherFailure(LogonError.InvalidUser))
                     }

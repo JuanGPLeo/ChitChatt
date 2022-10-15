@@ -14,4 +14,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-/logon/ui/google-services.json
+/logon/data/google-services.json
