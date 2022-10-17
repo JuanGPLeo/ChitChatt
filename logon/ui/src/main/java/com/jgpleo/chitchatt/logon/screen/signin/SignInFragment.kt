@@ -125,7 +125,10 @@ fun SignInFragment(
                     )
                 }
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password
+            ),
             keyboardActions = KeyboardActions {
                 signInAction(
                     viewModel,

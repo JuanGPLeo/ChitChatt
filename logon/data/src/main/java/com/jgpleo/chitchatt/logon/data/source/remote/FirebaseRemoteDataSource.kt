@@ -1,6 +1,8 @@
 package com.jgpleo.chitchatt.logon.data.source.remote
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.jgpleo.chitchatt.logon.data.source.RemoteDataSource
 import com.jgpleo.chitchatt.logon.data.source.Response
 import com.jgpleo.chitchatt.logon.data.source.State
@@ -13,19 +15,36 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override suspend fun createUser(email: String, pass: String): State<Response> {
-        val result = auth.createUserWithEmailAndPassword(email, pass).await()
-        return result.user?.let { firebaseUser ->
-            val userData = RemoteMapper.map(firebaseUser)
-            State.success(Response(userData))
-        } ?: State.failure("Unable to retrieve user data")
+        return errorHandlerTemplate {
+            val result = auth.createUserWithEmailAndPassword(email, pass).await()
+            result.user?.let { firebaseUser ->
+                val userData = RemoteMapper.map(firebaseUser)
+                State.success(Response(userData))
+            } ?: State.failure("Unable to retrieve user data")
+        }
     }
 
     override suspend fun login(email: String, pass: String): State<Response> {
-        val result = auth.signInWithEmailAndPassword(email, pass).await()
-        return result.user?.let { firebaseUser ->
-            val userData = RemoteMapper.map(firebaseUser)
-            State.success(Response(userData))
-        } ?: State.failure("Unable to retrieve user data")
+        return errorHandlerTemplate {
+            val result = auth.signInWithEmailAndPassword(email, pass).await()
+            result.user?.let { firebaseUser ->
+                val userData = RemoteMapper.map(firebaseUser)
+                State.success(Response(userData))
+            } ?: State.failure("Unable to retrieve user data")
+        }
+    }
+
+    private suspend fun errorHandlerTemplate(
+        action: suspend () -> State<Response>
+    ): State<Response> {
+        return try {
+            action()
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            State.failure("There was an exception :(")
+        } catch (e: Exception) {
+            Log.e("FirebaseRemoteDataSource", "login: ${e.message}")
+            State.failure("There was an exception :(")
+        }
     }
 
     override suspend fun rememberPassword(email: String): State<Unit> {
