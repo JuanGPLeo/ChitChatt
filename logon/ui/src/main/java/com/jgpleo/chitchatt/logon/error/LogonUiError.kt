@@ -1,8 +1,9 @@
 package com.jgpleo.chitchatt.logon.error
 
 sealed interface LogonUiError {
+    object NoError: LogonUiError
     object Unknown : LogonUiError
     object InvalidUser: LogonUiError
-    data class InvalidEmail(val message: String = ""): LogonUiError
-    data class MandatoryField(val message: String = "") : LogonUiError
+    object InvalidEmailOrPassFormat: LogonUiError
+    object MandatoryField : LogonUiError
 }

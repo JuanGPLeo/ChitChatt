@@ -6,7 +6,7 @@ import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
 import com.jgpleo.chitchatt.logon.domain.usecase.SignUpUseCase
 import com.jgpleo.chitchatt.logon.error.LogonUiError
 import com.jgpleo.chitchatt.logon.error.SignUpError
-import com.jgpleo.chitchatt.logon.mapper.UserMap
+import com.jgpleo.chitchatt.logon.mapper.UserMapper
 import com.jgpleo.chitchatt.logon.model.User
 import com.jgpleo.domain_common.usecase.result.Either
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,7 @@ class SignupViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Either.Success -> {
-                        val user = UserMap.map(result.data)
+                        val user = UserMapper.map(result.data)
                         screenState.value = State.Success(user)
                     }
                     is Either.Failure -> {

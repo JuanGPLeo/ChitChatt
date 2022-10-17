@@ -25,13 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
+import com.jgpleo.chitchatt.logon.mapper.ErrorMapper
 import com.jgpleo.chitchatt.logon.screen.LogonSelectedFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
-import com.jgpleo.ui_common.theme.PrimaryColor
-import com.jgpleo.ui_common.theme.ErrorColor
-import com.jgpleo.ui_common.theme.linkStyle
-import com.jgpleo.ui_common.theme.titleStyle
+import com.jgpleo.ui_common.component.dialog.Dialog
+import com.jgpleo.ui_common.component.dialog.DialogModel
+import com.jgpleo.ui_common.theme.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -39,6 +39,9 @@ fun SignInFragment(
     viewModel: SignInViewModel = viewModel(),
     onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
 ) {
+
+    val state = viewModel.state.collectAsState().value
+    val errorState = viewModel.errorState.collectAsState()
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var emailFocused by remember { mutableStateOf(false) }
@@ -134,7 +137,12 @@ fun SignInFragment(
                         contentDescription = stringResource(
                             id = R.string.login_eye_icon_content_description
                         ),
-                        tint = getTintForEyeIcon(pass.text.isNotEmpty(), showingPass, passFocused, passError),
+                        tint = getTintForEyeIcon(
+                            pass.text.isNotEmpty(),
+                            showingPass,
+                            passFocused,
+                            passError
+                        ),
                         modifier = Modifier.clickable {
                             showingPass = !showingPass
                             passFocusRequester.requestFocus()
@@ -194,6 +202,54 @@ fun SignInFragment(
                         viewModel.dispose()
                     }
             )
+        }
+
+        if (state is SignInViewModel.State.Error) {
+//            val errorModel = ErrorMapper.map(state.error)
+            Dialog(
+                model = errorState,
+                dismissAction = { viewModel.dismissError() }
+            )
+//            AlertDialog(
+//                properties = DialogProperties(
+//                    dismissOnBackPress = true,
+//                    dismissOnClickOutside = true
+//                ),
+//                onDismissRequest = {
+//                    viewModel.dispose()
+//                },
+//                title = {
+//                    Row(
+//                        horizontalArrangement = Arrangement.Center,
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+//                        Text(
+//                            text = errorModel.title,
+//                            style = titleStyle()
+//                        )
+//                    }
+//                },
+//                text = {
+//                    Text(
+//                        text = errorModel.description,
+//                        style = subtitleStyle()
+//                    )
+//                },
+//                confirmButton = {
+//                    Box(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
+//                    ) {
+//                        PrimaryButton(
+//                            text = "Ok",
+//                            modifier = Modifier.fillMaxWidth()
+//                        ) {
+//                            viewModel.dispose()
+//                        }
+//                    }
+//                },
+//            )
         }
     }
 }

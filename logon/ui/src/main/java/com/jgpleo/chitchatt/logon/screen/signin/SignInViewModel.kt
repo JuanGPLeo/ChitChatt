@@ -6,9 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
 import com.jgpleo.chitchatt.logon.domain.usecase.SignInUseCase
 import com.jgpleo.chitchatt.logon.error.LogonUiError
-import com.jgpleo.chitchatt.logon.mapper.UserMap
+import com.jgpleo.chitchatt.logon.error.SignInError
+import com.jgpleo.chitchatt.logon.mapper.ErrorMapper
+import com.jgpleo.chitchatt.logon.mapper.UserMapper
 import com.jgpleo.chitchatt.logon.model.User
 import com.jgpleo.domain_common.usecase.result.Either
+import com.jgpleo.ui_common.component.dialog.DialogModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -20,6 +23,9 @@ class SignInViewModel @Inject constructor(
 
     private val screenState = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = screenState
+
+    private val screenErrorState = MutableStateFlow(DialogModel())
+    val errorState: StateFlow<DialogModel> = screenErrorState
 
     private val screenEmailError = MutableStateFlow(false)
     val emailError: StateFlow<Boolean> = screenEmailError
@@ -37,7 +43,7 @@ class SignInViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Either.Success -> {
-                        val user = UserMap.map(result.data)
+                        val user = UserMapper.map(result.data)
                         screenState.value = State.Success(user)
                     }
                     is Either.Failure -> {
@@ -51,8 +57,9 @@ class SignInViewModel @Inject constructor(
 
     private fun checkEmail(email: String): Boolean {
         return if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            screenState.value = State.Error(LogonUiError.InvalidEmail())
+            screenState.value = State.Error(SignInError.InvalidEmailFormat)
             screenEmailError.value = true
+            screenErrorState.value = ErrorMapper.map(LogonUiError.Unknown)
             false
         } else {
             screenEmailError.value = false
@@ -62,13 +69,17 @@ class SignInViewModel @Inject constructor(
 
     private fun checkPass(pass: String): Boolean {
         return if (pass.isEmpty()) {
-            screenState.value = State.Error(LogonUiError.MandatoryField())
+            screenState.value = State.Error(LogonUiError.MandatoryField)
             screenPassError.value = true
             false
         } else {
             screenPassError.value = false
             true
         }
+    }
+
+    fun dismissError() {
+        screenErrorState.value = DialogModel()
     }
 
     fun dispose() {
