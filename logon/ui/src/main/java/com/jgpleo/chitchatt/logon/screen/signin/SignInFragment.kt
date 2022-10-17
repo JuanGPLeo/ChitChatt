@@ -29,9 +29,11 @@ import com.jgpleo.chitchatt.logon.screen.LogonSelectedFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
 import com.jgpleo.ui_common.theme.PrimaryColor
+import com.jgpleo.ui_common.theme.ErrorColor
 import com.jgpleo.ui_common.theme.linkStyle
 import com.jgpleo.ui_common.theme.titleStyle
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInFragment(
     viewModel: SignInViewModel = viewModel(),
@@ -40,11 +42,13 @@ fun SignInFragment(
 
     var email by remember { mutableStateOf(TextFieldValue("")) }
     var emailFocused by remember { mutableStateOf(false) }
+    val emailError = viewModel.emailError.collectAsState().value
 
     var pass by remember { mutableStateOf(TextFieldValue("")) }
     var passFocused by remember { mutableStateOf(false) }
     var showingPass by remember { mutableStateOf(false) }
     val passFocusRequester = remember { FocusRequester() }
+    val passError = viewModel.passError.collectAsState().value
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -75,9 +79,16 @@ fun SignInFragment(
                     contentDescription = stringResource(
                         id = R.string.login_lock_icon_content_description
                     ),
-                    tint = if (emailFocused) PrimaryColor else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    tint = if (emailError) {
+                        ErrorColor
+                    } else if (emailFocused) {
+                        PrimaryColor
+                    } else {
+                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    }
                 )
             },
+            isError = emailError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -107,7 +118,13 @@ fun SignInFragment(
                     contentDescription = stringResource(
                         id = R.string.login_lock_icon_content_description
                     ),
-                    tint = if (passFocused) PrimaryColor else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    tint = if (passError) {
+                        ErrorColor
+                    } else if (passFocused) {
+                        PrimaryColor
+                    } else {
+                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    }
                 )
             },
             trailingIcon = {
@@ -117,7 +134,7 @@ fun SignInFragment(
                         contentDescription = stringResource(
                             id = R.string.login_eye_icon_content_description
                         ),
-                        tint = getTintForEyeIcon(pass.text.isNotEmpty(), showingPass, passFocused),
+                        tint = getTintForEyeIcon(pass.text.isNotEmpty(), showingPass, passFocused, passError),
                         modifier = Modifier.clickable {
                             showingPass = !showingPass
                             passFocusRequester.requestFocus()
@@ -125,6 +142,7 @@ fun SignInFragment(
                     )
                 }
             },
+            isError = passError,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -132,8 +150,8 @@ fun SignInFragment(
             keyboardActions = KeyboardActions {
                 signInAction(
                     viewModel,
-                    email.toString(),
-                    pass.toString(),
+                    email.text,
+                    pass.text,
                     keyboardController
                 )
             },
@@ -146,7 +164,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction(viewModel, email.toString(), pass.toString(), keyboardController)
+            signInAction(viewModel, email.text, pass.text, keyboardController)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -184,11 +202,12 @@ fun SignInFragment(
 private fun getTintForEyeIcon(
     hasCharacters: Boolean,
     isShowingPass: Boolean,
-    passFocused: Boolean
+    passFocused: Boolean,
+    passError: Boolean
 ): Color {
     return if (hasCharacters) {
         if (isShowingPass && passFocused) {
-            PrimaryColor
+            if (passError) ErrorColor else PrimaryColor
         } else {
             LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
         }

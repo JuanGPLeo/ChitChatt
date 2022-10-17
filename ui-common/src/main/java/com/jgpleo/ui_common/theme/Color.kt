@@ -11,6 +11,8 @@ val ScreenBackgroundDark = Color(0xFF1D1D35)
 val ElementsBackgroundLight = Color(0xFFEAF8F5)
 val ElementsBackgroundDark = Color(0xFF4A4A5D)
 
+val ErrorColor = Color(0xffb00020)
+
 val Gray800 = Color(0xFF44444E)
 val Gray600 = Color(0xFF6E6E7E)
 val Gray400 = Color(0xFFB7B7BE)

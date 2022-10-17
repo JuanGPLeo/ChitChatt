@@ -1,5 +1,6 @@
 package com.jgpleo.chitchatt.logon.screen.signin
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
@@ -20,7 +21,17 @@ class SignInViewModel @Inject constructor(
     private val screenState = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = screenState
 
+    private val screenEmailError = MutableStateFlow(false)
+    val emailError: StateFlow<Boolean> = screenEmailError
+
+    private val screenPassError = MutableStateFlow(false)
+    val passError: StateFlow<Boolean> = screenPassError
+
     fun login(email: String, pass: String) {
+        val isValidEmail = checkEmail(email)
+        val isValidPass = checkPass(pass)
+        if (!isValidEmail || !isValidPass) return
+
         signInUseCase.prepare(UserCredentials(email = email, pass = pass))
             .onStart { screenState.value = State.Loading }
             .onEach { result ->
@@ -36,6 +47,28 @@ class SignInViewModel @Inject constructor(
             }.catch {
                 screenState.value = State.Error(LogonUiError.Unknown)
             }.launchIn(viewModelScope)
+    }
+
+    private fun checkEmail(email: String): Boolean {
+        return if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            screenState.value = State.Error(LogonUiError.InvalidEmail())
+            screenEmailError.value = true
+            false
+        } else {
+            screenEmailError.value = false
+            true
+        }
+    }
+
+    private fun checkPass(pass: String): Boolean {
+        return if (pass.isEmpty()) {
+            screenState.value = State.Error(LogonUiError.MandatoryField())
+            screenPassError.value = true
+            false
+        } else {
+            screenPassError.value = false
+            true
+        }
     }
 
     fun dispose() {
