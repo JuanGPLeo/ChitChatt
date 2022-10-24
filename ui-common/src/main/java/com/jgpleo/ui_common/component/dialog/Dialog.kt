@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.jgpleo.ui_common.component.button.PrimaryButton
@@ -32,14 +33,14 @@ fun Dialog(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
-                            text = title,
+                            text = stringResource(id = title),
                             style = titleStyle()
                         )
                     }
                 },
                 text = {
                     Text(
-                        text = description,
+                        text = stringResource(id = description),
                         style = subtitleStyle()
                     )
                 },
@@ -51,7 +52,7 @@ fun Dialog(
                                 .padding(start = 8.dp, end = 8.dp)
                         ) {
                             SecondaryButton(
-                                text = secondaryButtonText,
+                                text = stringResource(id = it),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 dismissAction()
@@ -66,7 +67,7 @@ fun Dialog(
                             .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
                     ) {
                         PrimaryButton(
-                            text = primaryButtonText,
+                            text = stringResource(id = primaryButtonText),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             primaryButtonAction()

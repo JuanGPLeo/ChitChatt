@@ -25,13 +25,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
-import com.jgpleo.chitchatt.logon.mapper.ErrorMapper
 import com.jgpleo.chitchatt.logon.screen.LogonSelectedFragment
 import com.jgpleo.chitchatt.logon.ui.R
 import com.jgpleo.ui_common.component.button.PrimaryButton
 import com.jgpleo.ui_common.component.dialog.Dialog
-import com.jgpleo.ui_common.component.dialog.DialogModel
-import com.jgpleo.ui_common.theme.*
+import com.jgpleo.ui_common.component.textfield.CustomTextField
+import com.jgpleo.ui_common.theme.ErrorColor
+import com.jgpleo.ui_common.theme.PrimaryColor
+import com.jgpleo.ui_common.theme.linkStyle
+import com.jgpleo.ui_common.theme.titleStyle
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,11 +45,10 @@ fun SignInFragment(
     val state = viewModel.state.collectAsState().value
     val errorState = viewModel.errorState.collectAsState()
 
-    var email by remember { mutableStateOf(TextFieldValue("")) }
-    var emailFocused by remember { mutableStateOf(false) }
+    var email by remember { mutableStateOf("") }
     val emailError = viewModel.emailError.collectAsState().value
 
-    var pass by remember { mutableStateOf(TextFieldValue("")) }
+    var pass by remember { mutableStateOf("") }
     var passFocused by remember { mutableStateOf(false) }
     var showingPass by remember { mutableStateOf(false) }
     val passFocusRequester = remember { FocusRequester() }
@@ -69,29 +70,12 @@ fun SignInFragment(
 
         Spacer(modifier = Modifier.padding(16.dp))
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { emailFocused = it.isFocused },
-            label = { Text(text = stringResource(id = R.string.login_email)) },
+        CustomTextField(
+            label = R.string.login_email,
             value = email,
-            singleLine = true,
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_mail),
-                    contentDescription = stringResource(
-                        id = R.string.login_lock_icon_content_description
-                    ),
-                    tint = if (emailError) {
-                        ErrorColor
-                    } else if (emailFocused) {
-                        PrimaryColor
-                    } else {
-                        LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
-                    }
-                )
-            },
-            isError = emailError,
+            leadingIcon = R.drawable.ic_mail,
+            leadingIconContentDescription = R.string.login_lock_icon_content_description,
+            error = emailError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -102,6 +86,8 @@ fun SignInFragment(
         Spacer(modifier = Modifier.padding(4.dp))
 
         OutlinedTextField(
+            value = pass,
+            onValueChange = { pass = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(passFocusRequester)
@@ -112,16 +98,14 @@ fun SignInFragment(
                     }
                 },
             label = { Text(text = stringResource(id = R.string.login_pass)) },
-            value = pass,
             singleLine = true,
-            visualTransformation = if (showingPass && passFocused) VisualTransformation.None else PasswordVisualTransformation(),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_lock),
                     contentDescription = stringResource(
                         id = R.string.login_lock_icon_content_description
                     ),
-                    tint = if (passError) {
+                    tint = if (passError.hasError) {
                         ErrorColor
                     } else if (passFocused) {
                         PrimaryColor
@@ -131,17 +115,17 @@ fun SignInFragment(
                 )
             },
             trailingIcon = {
-                if (pass.text.isNotEmpty()) {
+                if (pass.isNotEmpty()) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_eye),
                         contentDescription = stringResource(
                             id = R.string.login_eye_icon_content_description
                         ),
                         tint = getTintForEyeIcon(
-                            pass.text.isNotEmpty(),
+                            pass.isNotEmpty(),
                             showingPass,
                             passFocused,
-                            passError
+                            passError.hasError
                         ),
                         modifier = Modifier.clickable {
                             showingPass = !showingPass
@@ -150,7 +134,8 @@ fun SignInFragment(
                     )
                 }
             },
-            isError = passError,
+            isError = passError.hasError,
+            visualTransformation = if (showingPass && passFocused) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
@@ -158,13 +143,22 @@ fun SignInFragment(
             keyboardActions = KeyboardActions {
                 signInAction(
                     viewModel,
-                    email.text,
-                    pass.text,
+                    email,
+                    pass,
                     keyboardController
                 )
-            },
-            onValueChange = { pass = it }
+            }
         )
+
+        if (passError.hasError) {
+            passError.errorMessage?.let {
+                Text(
+                    text = stringResource(id = it),
+                    color = ErrorColor,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.padding(8.dp))
 
@@ -172,7 +166,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction(viewModel, email.text, pass.text, keyboardController)
+            signInAction(viewModel, email, pass, keyboardController)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -205,51 +199,10 @@ fun SignInFragment(
         }
 
         if (state is SignInViewModel.State.Error) {
-//            val errorModel = ErrorMapper.map(state.error)
             Dialog(
                 model = errorState,
                 dismissAction = { viewModel.dismissError() }
             )
-//            AlertDialog(
-//                properties = DialogProperties(
-//                    dismissOnBackPress = true,
-//                    dismissOnClickOutside = true
-//                ),
-//                onDismissRequest = {
-//                    viewModel.dispose()
-//                },
-//                title = {
-//                    Row(
-//                        horizontalArrangement = Arrangement.Center,
-//                        modifier = Modifier.fillMaxWidth()
-//                    ) {
-//                        Text(
-//                            text = errorModel.title,
-//                            style = titleStyle()
-//                        )
-//                    }
-//                },
-//                text = {
-//                    Text(
-//                        text = errorModel.description,
-//                        style = subtitleStyle()
-//                    )
-//                },
-//                confirmButton = {
-//                    Box(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(start = 8.dp, end = 8.dp, bottom = 16.dp)
-//                    ) {
-//                        PrimaryButton(
-//                            text = "Ok",
-//                            modifier = Modifier.fillMaxWidth()
-//                        ) {
-//                            viewModel.dispose()
-//                        }
-//                    }
-//                },
-//            )
         }
     }
 }
@@ -272,6 +225,7 @@ private fun getTintForEyeIcon(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 private fun signInAction(
     viewModel: SignInViewModel,
     email: String,
