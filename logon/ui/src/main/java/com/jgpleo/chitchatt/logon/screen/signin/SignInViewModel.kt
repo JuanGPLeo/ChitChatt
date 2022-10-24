@@ -8,10 +8,12 @@ import com.jgpleo.chitchatt.logon.domain.usecase.IsEmailValidUseCase.EmailStatus
 import com.jgpleo.chitchatt.logon.domain.usecase.IsPassValidUseCase
 import com.jgpleo.chitchatt.logon.domain.usecase.IsPassValidUseCase.PassStatus
 import com.jgpleo.chitchatt.logon.domain.usecase.SignInUseCase
+import com.jgpleo.chitchatt.logon.error.LogonUiError
 import com.jgpleo.chitchatt.logon.mapper.UserMapper
 import com.jgpleo.chitchatt.logon.model.User
 import com.jgpleo.chitchatt.logon.screen.signin.error.checkEmailStatus
 import com.jgpleo.chitchatt.logon.screen.signin.error.checkPassStatus
+import com.jgpleo.chitchatt.logon.screen.signin.error.getError
 import com.jgpleo.domain_common.usecase.result.Either
 import com.jgpleo.ui_common.component.dialog.DialogModel
 import com.jgpleo.ui_common.component.textfield.TextFieldError
@@ -29,19 +31,18 @@ class SignInViewModel @Inject constructor(
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state
 
-    private val _screenError = MutableStateFlow(DialogModel())
-    val errorState: StateFlow<DialogModel> = _screenError
-
     private val _emailError = MutableStateFlow(TextFieldError())
     val emailError: StateFlow<TextFieldError> = _emailError
+    val email = MutableStateFlow("")
 
     private val _passError = MutableStateFlow(TextFieldError())
     val passError: StateFlow<TextFieldError> = _passError
+    val pass = MutableStateFlow("")
 
-    fun login(email: String, pass: String) {
-        if (!fieldsAreValid(email, pass)) return
+    fun login() {
+        if (!fieldsAreValid()) return
 
-        signInUseCase.prepare(UserCredentials(email = email, pass = pass))
+        signInUseCase.prepare(UserCredentials(email = email.value, pass = pass.value))
             .onStart { _state.value = State.Loading }
             .onEach { result ->
                 when (result) {
@@ -50,19 +51,21 @@ class SignInViewModel @Inject constructor(
                         _state.value = State.Success(user)
                     }
                     is Either.Failure -> {
-//                        screenState.value = State.Error(LogonUiError.InvalidUser)
+                        val error = getError(LogonUiError.InvalidUser)
+                        _state.value = State.Error(error)
                     }
                 }
             }.catch {
-//                screenState.value = State.Error(LogonUiError.Unknown)
+                val error = getError(LogonUiError.Unknown)
+                _state.value = State.Error(error)
             }.launchIn(viewModelScope)
     }
 
-    private fun fieldsAreValid(email: String, pass: String): Boolean {
-        val emailStatus = isEmailValidUseCase(email)
+    private fun fieldsAreValid(): Boolean {
+        val emailStatus = isEmailValidUseCase(email.value)
         _emailError.value = checkEmailStatus(emailStatus)
 
-        val passStatus = isPassValidUseCase(pass)
+        val passStatus = isPassValidUseCase(pass.value)
         _passError.value = checkPassStatus(passStatus)
 
         return emailStatus == EmailStatus.Correct &&
@@ -70,7 +73,8 @@ class SignInViewModel @Inject constructor(
     }
 
     fun dismissError() {
-        _screenError.value = DialogModel()
+        _state.value = State.Error(DialogModel())
+        _state.value = State.Idle
     }
 
     fun dispose() {
@@ -83,7 +87,7 @@ class SignInViewModel @Inject constructor(
         object Idle : State
         object Loading: State
         data class Success(val user: User) : State
-        data class Error(val error: String) : State
+        data class Error(val error: DialogModel) : State
     }
 
 }

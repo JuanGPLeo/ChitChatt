@@ -2,6 +2,7 @@
 
 package com.jgpleo.chitchatt.logon.screen.signin
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -35,6 +36,7 @@ import com.jgpleo.ui_common.theme.PrimaryColor
 import com.jgpleo.ui_common.theme.linkStyle
 import com.jgpleo.ui_common.theme.titleStyle
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInFragment(
@@ -43,16 +45,10 @@ fun SignInFragment(
 ) {
 
     val state = viewModel.state.collectAsState().value
-    val errorState = viewModel.errorState.collectAsState()
 
-    var email by remember { mutableStateOf("") }
-    val emailError = viewModel.emailError.collectAsState().value
-
-    var pass by remember { mutableStateOf("") }
     var passFocused by remember { mutableStateOf(false) }
     var showingPass by remember { mutableStateOf(false) }
     val passFocusRequester = remember { FocusRequester() }
-    val passError = viewModel.passError.collectAsState().value
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -72,22 +68,22 @@ fun SignInFragment(
 
         CustomTextField(
             label = R.string.login_email,
-            value = email,
+            value = viewModel.email.collectAsState().value,
             leadingIcon = R.drawable.ic_mail,
             leadingIconContentDescription = R.string.login_lock_icon_content_description,
-            error = emailError,
+            error = viewModel.emailError.collectAsState().value,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
-            onValueChange = { email = it }
+            onValueChange = { viewModel.email.value = it }
         )
 
         Spacer(modifier = Modifier.padding(4.dp))
 
         OutlinedTextField(
-            value = pass,
-            onValueChange = { pass = it },
+            value = viewModel.pass.collectAsState().value,
+            onValueChange = { viewModel.pass.value = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(passFocusRequester)
@@ -105,7 +101,7 @@ fun SignInFragment(
                     contentDescription = stringResource(
                         id = R.string.login_lock_icon_content_description
                     ),
-                    tint = if (passError.hasError) {
+                    tint = if (viewModel.passError.collectAsState().value.hasError) {
                         ErrorColor
                     } else if (passFocused) {
                         PrimaryColor
@@ -115,17 +111,17 @@ fun SignInFragment(
                 )
             },
             trailingIcon = {
-                if (pass.isNotEmpty()) {
+                if (viewModel.pass.value.isNotEmpty()) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_eye),
                         contentDescription = stringResource(
                             id = R.string.login_eye_icon_content_description
                         ),
                         tint = getTintForEyeIcon(
-                            pass.isNotEmpty(),
+                            viewModel.pass.value.isNotEmpty(),
                             showingPass,
                             passFocused,
-                            passError.hasError
+                            viewModel.passError.collectAsState().value.hasError
                         ),
                         modifier = Modifier.clickable {
                             showingPass = !showingPass
@@ -134,7 +130,7 @@ fun SignInFragment(
                     )
                 }
             },
-            isError = passError.hasError,
+            isError = viewModel.passError.collectAsState().value.hasError,
             visualTransformation = if (showingPass && passFocused) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -143,15 +139,13 @@ fun SignInFragment(
             keyboardActions = KeyboardActions {
                 signInAction(
                     viewModel,
-                    email,
-                    pass,
                     keyboardController
                 )
             }
         )
 
-        if (passError.hasError) {
-            passError.errorMessage?.let {
+        if (viewModel.passError.collectAsState().value.hasError) {
+            viewModel.passError.collectAsState().value.errorMessage?.let {
                 Text(
                     text = stringResource(id = it),
                     color = ErrorColor,
@@ -166,7 +160,7 @@ fun SignInFragment(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
         ) {
-            signInAction(viewModel, email, pass, keyboardController)
+            signInAction(viewModel, keyboardController)
         }
 
         Spacer(modifier = Modifier.padding(8.dp))
@@ -200,7 +194,7 @@ fun SignInFragment(
 
         if (state is SignInViewModel.State.Error) {
             Dialog(
-                model = errorState,
+                model = state.error,
                 dismissAction = { viewModel.dismissError() }
             )
         }
@@ -228,11 +222,9 @@ private fun getTintForEyeIcon(
 @OptIn(ExperimentalComposeUiApi::class)
 private fun signInAction(
     viewModel: SignInViewModel,
-    email: String,
-    pass: String,
     keyboardController: SoftwareKeyboardController?
 ) {
-    viewModel.login(email, pass)
+    viewModel.login()
     keyboardController?.hide()
 }
 

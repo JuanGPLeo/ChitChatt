@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -16,10 +15,10 @@ import com.jgpleo.ui_common.theme.titleStyle
 
 @Composable
 fun Dialog(
-    model: State<DialogModel>,
+    model: DialogModel,
     dismissAction: () -> Unit
 ) {
-    with(model.value) {
+    with(model) {
         if (showDialog) {
             AlertDialog(
                 properties = DialogProperties(
