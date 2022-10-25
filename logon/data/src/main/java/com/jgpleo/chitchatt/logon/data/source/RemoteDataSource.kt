@@ -8,16 +8,21 @@ interface RemoteDataSource {
     suspend fun rememberPassword(email: String): State<Unit>
 }
 
-data class Response(
-    val user: UserEntity? = null
-)
+data class Response(val user: UserEntity? = null)
 
 sealed class State<T> {
     data class Successful<T>(val data: T) : State<T>()
-    data class Failed<T>(val message: String) : State<T>()
+    data class Failed<T>(val error: FailureState) : State<T>()
 
     companion object {
         fun <T> success(data: T) = Successful(data)
-        fun <T> failure(message: String) = Failed<T>(message)
+        fun <T> failure(error: FailureState) = Failed<T>(error)
     }
+}
+
+sealed interface FailureState {
+    object InvalidUser : FailureState
+    object TooManyRequest : FailureState
+    object InvalidUserData : FailureState
+    object Unknown : FailureState
 }

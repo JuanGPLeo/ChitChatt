@@ -5,6 +5,6 @@ data class UserData(
     val name: String
 ) {
     fun isValid(): Boolean {
-        return email.isNotEmpty() && name.isNotEmpty()
+        return email.isNotEmpty()
     }
 }

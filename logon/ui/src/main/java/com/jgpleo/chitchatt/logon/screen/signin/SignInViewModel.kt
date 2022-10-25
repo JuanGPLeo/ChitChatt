@@ -2,13 +2,13 @@ package com.jgpleo.chitchatt.logon.screen.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jgpleo.chitchatt.logon.domain.error.LogonError
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
 import com.jgpleo.chitchatt.logon.domain.usecase.IsEmailValidUseCase
 import com.jgpleo.chitchatt.logon.domain.usecase.IsEmailValidUseCase.EmailStatus
 import com.jgpleo.chitchatt.logon.domain.usecase.IsPassValidUseCase
 import com.jgpleo.chitchatt.logon.domain.usecase.IsPassValidUseCase.PassStatus
 import com.jgpleo.chitchatt.logon.domain.usecase.SignInUseCase
-import com.jgpleo.chitchatt.logon.error.LogonUiError
 import com.jgpleo.chitchatt.logon.mapper.UserMapper
 import com.jgpleo.chitchatt.logon.model.User
 import com.jgpleo.chitchatt.logon.screen.signin.error.checkEmailStatus
@@ -51,12 +51,12 @@ class SignInViewModel @Inject constructor(
                         _state.value = State.Success(user)
                     }
                     is Either.Failure -> {
-                        val error = getError(LogonUiError.InvalidUser)
+                        val error = getError(result.error)
                         _state.value = State.Error(error)
                     }
                 }
             }.catch {
-                val error = getError(LogonUiError.Unknown)
+                val error = getError(LogonError.Unknown)
                 _state.value = State.Error(error)
             }.launchIn(viewModelScope)
     }
@@ -79,7 +79,9 @@ class SignInViewModel @Inject constructor(
 
     fun dispose() {
         _state.value = State.Idle
+        email.value = ""
         _emailError.value = TextFieldError()
+        pass.value = ""
         _passError.value = TextFieldError()
     }
 

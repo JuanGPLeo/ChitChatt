@@ -18,6 +18,7 @@ import com.jgpleo.chitchatt.logon.screen.restorepass.RestorePassFragment
 import com.jgpleo.chitchatt.logon.screen.signin.SignInFragment
 import com.jgpleo.chitchatt.logon.screen.signup.SignupFragment
 import com.jgpleo.chitchatt.logon.ui.R
+import com.jgpleo.ui_common.component.loading.LoadingScreen
 import com.jgpleo.ui_common.theme.logoStyle
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -25,29 +26,39 @@ import com.jgpleo.ui_common.theme.logoStyle
 fun LogonScreen() {
 
     var currentFragment by remember { mutableStateOf(LogonSelectedFragment.SignIn) }
+    var loading by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier.verticalScroll(rememberScrollState())
-    ) {
-        LogoAnimation()
+    Box {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
+        ) {
+            LogoAnimation()
 
-        AnimatedContent(
-            targetState = currentFragment,
-            transitionSpec = {
-                if (initialState == LogonSelectedFragment.SignIn) {
-                    slideInHorizontally { width -> width } + fadeIn() with
-                            slideOutHorizontally { width -> -width } + fadeOut()
-                } else {
-                    slideInHorizontally { width -> -width } + fadeIn() with
-                            slideOutHorizontally { width -> width } + fadeOut()
+            AnimatedContent(
+                targetState = currentFragment,
+                transitionSpec = {
+                    if (initialState == LogonSelectedFragment.SignIn) {
+                        slideInHorizontally { width -> width } + fadeIn() with
+                                slideOutHorizontally { width -> -width } + fadeOut()
+                    } else {
+                        slideInHorizontally { width -> -width } + fadeIn() with
+                                slideOutHorizontally { width -> width } + fadeOut()
+                    }
+                }
+            ) { fragment ->
+                when (fragment) {
+                    LogonSelectedFragment.SignIn -> SignInFragment(
+                        onLoadingStateChange = { loading = it },
+                        onCurrentFragmentChange = { currentFragment = it }
+                    )
+                    LogonSelectedFragment.SignUp -> SignupFragment { currentFragment = it }
+                    LogonSelectedFragment.RestorePass -> RestorePassFragment { currentFragment = it }
                 }
             }
-        ) { fragment ->
-            when (fragment) {
-                LogonSelectedFragment.SignIn -> SignInFragment { currentFragment = it }
-                LogonSelectedFragment.SignUp -> SignupFragment { currentFragment = it }
-                LogonSelectedFragment.RestorePass -> RestorePassFragment { currentFragment = it }
-            }
+        }
+
+        if (loading) {
+            LoadingScreen(lottieRawId = R.raw.chitchatt_loading_animation)
         }
 
     }

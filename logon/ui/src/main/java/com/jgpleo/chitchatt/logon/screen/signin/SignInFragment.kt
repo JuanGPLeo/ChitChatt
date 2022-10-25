@@ -41,10 +41,12 @@ import com.jgpleo.ui_common.theme.titleStyle
 @Composable
 fun SignInFragment(
     viewModel: SignInViewModel = viewModel(),
-    onCurrentFragmentChange: (current: LogonSelectedFragment) -> Unit
+    onLoadingStateChange: (Boolean) -> Unit,
+    onCurrentFragmentChange: (LogonSelectedFragment) -> Unit
 ) {
 
     val state = viewModel.state.collectAsState().value
+    onLoadingStateChange(state is SignInViewModel.State.Loading)
 
     var passFocused by remember { mutableStateOf(false) }
     var showingPass by remember { mutableStateOf(false) }
@@ -136,12 +138,7 @@ fun SignInFragment(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Password
             ),
-            keyboardActions = KeyboardActions {
-                signInAction(
-                    viewModel,
-                    keyboardController
-                )
-            }
+            keyboardActions = KeyboardActions { signInAction(viewModel, keyboardController) }
         )
 
         if (viewModel.passError.collectAsState().value.hasError) {
@@ -159,9 +156,7 @@ fun SignInFragment(
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.login_button)
-        ) {
-            signInAction(viewModel, keyboardController)
-        }
+        ) { signInAction(viewModel, keyboardController) }
 
         Spacer(modifier = Modifier.padding(8.dp))
 
@@ -232,6 +227,6 @@ private fun signInAction(
 @Composable
 private fun SignInFragmentPreview() {
     Box(modifier = Modifier.padding(10.dp)) {
-        SignInFragment {}
+        SignInFragment(onLoadingStateChange = {}) {}
     }
 }

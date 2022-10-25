@@ -39,6 +39,9 @@
     <string name="signin_error_bad_credentials_title">Incorrect credentials</string>
     <string name="signin_error_bad_credentials_description">Incorrect username or password.\n\nPlease check the fields and try again.</string>
     <string name="signin_error_bad_credentials_button">OK</string>
+    <string name="signin_error_invalid_user_data_title">Communication error</string>
+    <string name="signin_error_invalid_user_data_description">There was a problem retrieving your user data.\n\n Please try again later.</string>
+    <string name="signin_error_invalid_user_data_button">OK</string>
 
     <string name="logon_error_unknown_title">Oops, something has gone wrong</string>
     <string name="logon_error_unknown_description">An unexpected error occurred, please try again later</string>

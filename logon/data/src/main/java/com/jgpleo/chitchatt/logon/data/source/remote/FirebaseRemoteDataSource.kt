@@ -1,8 +1,9 @@
 package com.jgpleo.chitchatt.logon.data.source.remote
 
-import android.util.Log
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.jgpleo.chitchatt.logon.data.source.FailureState
 import com.jgpleo.chitchatt.logon.data.source.RemoteDataSource
 import com.jgpleo.chitchatt.logon.data.source.Response
 import com.jgpleo.chitchatt.logon.data.source.State
@@ -20,7 +21,7 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
             result.user?.let { firebaseUser ->
                 val userData = RemoteMapper.map(firebaseUser)
                 State.success(Response(userData))
-            } ?: State.failure("Unable to retrieve user data")
+            } ?: State.failure(FailureState.InvalidUserData)
         }
     }
 
@@ -30,7 +31,7 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
             result.user?.let { firebaseUser ->
                 val userData = RemoteMapper.map(firebaseUser)
                 State.success(Response(userData))
-            } ?: State.failure("Unable to retrieve user data")
+            } ?: State.failure(FailureState.InvalidUserData)
         }
     }
 
@@ -40,10 +41,11 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
         return try {
             action()
         } catch (e: FirebaseAuthInvalidCredentialsException) {
-            State.failure("There was an exception :(")
+            State.failure(FailureState.InvalidUser)
+        } catch (e: FirebaseTooManyRequestsException) {
+            State.failure(FailureState.TooManyRequest)
         } catch (e: Exception) {
-            Log.e("FirebaseRemoteDataSource", "login: ${e.message}")
-            State.failure("There was an exception :(")
+            State.failure(FailureState.Unknown)
         }
     }
 

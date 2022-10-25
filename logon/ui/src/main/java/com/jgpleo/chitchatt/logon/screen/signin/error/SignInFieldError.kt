@@ -28,11 +28,8 @@ fun checkPassStatus(passStatus: PassStatus): TextFieldError {
             errorMessage = R.string.signin_error_mandatory_pass
         )
 
-        is PassStatus.WeakPass -> TextFieldError(
-            hasError = true,
-            errorMessage = 0
-        )
-
         is PassStatus.Correct -> TextFieldError()
+
+        else -> TextFieldError()
     }
 }
