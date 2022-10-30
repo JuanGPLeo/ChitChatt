@@ -24,5 +24,6 @@ sealed interface FailureState {
     object InvalidUser : FailureState
     object TooManyRequest : FailureState
     object InvalidUserData : FailureState
+    object UserAlreadyExists : FailureState
     object Unknown : FailureState
 }

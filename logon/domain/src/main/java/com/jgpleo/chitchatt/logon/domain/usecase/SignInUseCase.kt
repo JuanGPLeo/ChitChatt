@@ -29,12 +29,12 @@ class SignInUseCase @Inject constructor(
                 }
                 .onFailure { error ->
                     val result = when (error) {
-                        is LogonRepositoryError.InvalidUser -> eitherFailure(LogonError.InvalidUser)
-                        is LogonRepositoryError.InvalidUserData -> eitherFailure(LogonError.InvalidUserData)
-                        is LogonRepositoryError.Unknown -> eitherFailure(LogonError.Unknown)
-                        else -> eitherFailure(LogonError.Unknown)
+                        is LogonRepositoryError.InvalidUser -> LogonError.InvalidUser
+                        is LogonRepositoryError.InvalidUserData -> LogonError.InvalidUserData
+                        is LogonRepositoryError.Unknown -> LogonError.Unknown
+                        else -> LogonError.Unknown
                     }
-                    emit(result)
+                    emit(eitherFailure(result))
                 }
         }
 

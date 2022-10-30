@@ -3,6 +3,7 @@ package com.jgpleo.chitchatt.logon.data.source.remote
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.jgpleo.chitchatt.logon.data.source.FailureState
 import com.jgpleo.chitchatt.logon.data.source.RemoteDataSource
 import com.jgpleo.chitchatt.logon.data.source.Response
@@ -15,9 +16,9 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
 
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    override suspend fun createUser(email: String, pass: String): State<Response> {
+    override suspend fun login(email: String, pass: String): State<Response> {
         return errorHandlerTemplate {
-            val result = auth.createUserWithEmailAndPassword(email, pass).await()
+            val result = auth.signInWithEmailAndPassword(email, pass).await()
             result.user?.let { firebaseUser ->
                 val userData = RemoteMapper.map(firebaseUser)
                 State.success(Response(userData))
@@ -25,9 +26,9 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
         }
     }
 
-    override suspend fun login(email: String, pass: String): State<Response> {
+    override suspend fun createUser(email: String, pass: String): State<Response> {
         return errorHandlerTemplate {
-            val result = auth.signInWithEmailAndPassword(email, pass).await()
+            val result = auth.createUserWithEmailAndPassword(email, pass).await()
             result.user?.let { firebaseUser ->
                 val userData = RemoteMapper.map(firebaseUser)
                 State.success(Response(userData))
@@ -44,6 +45,8 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
             State.failure(FailureState.InvalidUser)
         } catch (e: FirebaseTooManyRequestsException) {
             State.failure(FailureState.TooManyRequest)
+        } catch (e: FirebaseAuthUserCollisionException) {
+            State.failure(FailureState.UserAlreadyExists)
         } catch (e: Exception) {
             State.failure(FailureState.Unknown)
         }

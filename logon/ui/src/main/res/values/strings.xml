@@ -33,8 +33,7 @@
     <string name="signup_back_login_link">Back to login</string>
 
     <!--  Error messages  -->
-    <string name="signin_error_mandatory_email">Email required to access</string>
-    <string name="signin_error_mandatory_pass">Pass required to access</string>
+    <string name="signin_error_mandatory_pass">Password required to access</string>
     <string name="signin_error_invalid_email">Please enter a correct email</string>
     <string name="signin_error_bad_credentials_title">Incorrect credentials</string>
     <string name="signin_error_bad_credentials_description">Incorrect username or password.\n\nPlease check the fields and try again.</string>
@@ -43,6 +42,19 @@
     <string name="signin_error_invalid_user_data_description">There was a problem retrieving your user data.\n\n Please try again later.</string>
     <string name="signin_error_invalid_user_data_button">OK</string>
 
+    <string name="signup_error_email_already_exists">Enter another email</string>
+    <string name="signup_error_mandatory_pass">Password required to access</string>
+    <string name="signup_error_mandatory_validate_pass">Confirm password required</string>
+    <string name="signup_error_both_pass_not_equals">Both passwords must be the same</string>
+    <string name="signup_error_weak_pass_field">Weak pass</string>
+    <string name="signup_error_weak_pass_title">Weak pass</string>
+    <string name="signup_error_weak_pass_description">The password must contain at least:\n\n- a lowercase letter\n- an uppercase letter\n- a special character\n- at least 6 characters\n- must not contain spaces</string>
+    <string name="signup_error_weak_pass_button">OK</string>
+    <string name="signup_error_user_already_exists_title">Invalid email</string>
+    <string name="signup_error_user_already_exists_description">There is already a registered user with that email.</string>
+    <string name="signup_error_user_already_exists_button">OK</string>
+
+    <string name="logon_error_mandatory_email">Email required to access</string>
     <string name="logon_error_unknown_title">Oops, something has gone wrong</string>
     <string name="logon_error_unknown_description">An unexpected error occurred, please try again later</string>
     <string name="logon_error_unknown_button">OK</string>

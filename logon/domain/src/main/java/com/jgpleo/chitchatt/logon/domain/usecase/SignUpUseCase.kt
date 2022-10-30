@@ -4,6 +4,7 @@ import com.jgpleo.chitchatt.logon.domain.error.LogonError
 import com.jgpleo.chitchatt.logon.domain.model.UserCredentials
 import com.jgpleo.chitchatt.logon.domain.model.UserData
 import com.jgpleo.chitchatt.logon.domain.repository.LogonRepository
+import com.jgpleo.chitchatt.logon.domain.repository.error.LogonRepositoryError
 import com.jgpleo.domain_common.usecase.UseCase
 import com.jgpleo.domain_common.usecase.dispatcher.DispatcherProvider
 import com.jgpleo.domain_common.usecase.result.*
@@ -26,8 +27,14 @@ class SignUpUseCase @Inject constructor(
                         emit(eitherFailure(LogonError.InvalidUser))
                     }
                 }
-                .onFailure {
-                    emit(eitherFailure(LogonError.InvalidUser))
+                .onFailure { error ->
+                    val result = when (error) {
+                        is LogonRepositoryError.InvalidUserData -> LogonError.InvalidUserData
+                        is LogonRepositoryError.UserAlreadyExists -> LogonError.UserAlreadyExists
+                        is LogonRepositoryError.Unknown -> LogonError.Unknown
+                        else -> LogonError.Unknown
+                    }
+                    emit(eitherFailure(result))
                 }
         }
 

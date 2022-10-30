@@ -11,9 +11,9 @@ import com.jgpleo.chitchatt.logon.domain.usecase.IsPassValidUseCase.PassStatus
 import com.jgpleo.chitchatt.logon.domain.usecase.SignInUseCase
 import com.jgpleo.chitchatt.logon.mapper.UserMapper
 import com.jgpleo.chitchatt.logon.model.User
-import com.jgpleo.chitchatt.logon.screen.signin.error.checkEmailStatus
+import com.jgpleo.chitchatt.logon.screen.common.error.checkEmailStatus
 import com.jgpleo.chitchatt.logon.screen.signin.error.checkPassStatus
-import com.jgpleo.chitchatt.logon.screen.signin.error.getError
+import com.jgpleo.chitchatt.logon.screen.signin.error.getSignInError
 import com.jgpleo.domain_common.usecase.result.Either
 import com.jgpleo.ui_common.component.dialog.DialogModel
 import com.jgpleo.ui_common.component.textfield.TextFieldError
@@ -51,12 +51,12 @@ class SignInViewModel @Inject constructor(
                         _state.value = State.Success(user)
                     }
                     is Either.Failure -> {
-                        val error = getError(result.error)
+                        val error = getSignInError(result.error)
                         _state.value = State.Error(error)
                     }
                 }
             }.catch {
-                val error = getError(LogonError.Unknown)
+                val error = getSignInError(LogonError.Unknown)
                 _state.value = State.Error(error)
             }.launchIn(viewModelScope)
     }
@@ -87,7 +87,7 @@ class SignInViewModel @Inject constructor(
 
     sealed interface State {
         object Idle : State
-        object Loading: State
+        object Loading : State
         data class Success(val user: User) : State
         data class Error(val error: DialogModel) : State
     }
