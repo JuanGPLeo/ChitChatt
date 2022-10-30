@@ -3,6 +3,7 @@ package com.jgpleo.chitchatt.logon.data.source.remote
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.jgpleo.chitchatt.logon.data.source.FailureState
 import com.jgpleo.chitchatt.logon.data.source.RemoteDataSource
@@ -53,8 +54,14 @@ class FirebaseRemoteDataSource @Inject constructor() : RemoteDataSource {
     }
 
     override suspend fun rememberPassword(email: String): State<Unit> {
-        auth.sendPasswordResetEmail(email).await()
-        return State.success(Unit)
+        return try {
+            auth.sendPasswordResetEmail(email).await()
+            State.success(Unit)
+        } catch (e: FirebaseAuthInvalidUserException) {
+            State.failure(FailureState.InvalidUser)
+        } catch (e: Exception) {
+            State.failure(FailureState.Unknown)
+        }
     }
 
 }

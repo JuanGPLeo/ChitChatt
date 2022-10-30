@@ -55,7 +55,10 @@ fun LogonScreen() {
                         onLoadingStateChange = { loading = it },
                         onCurrentFragmentChange = { currentFragment = it }
                     )
-                    LogonSelectedFragment.RestorePass -> RestorePassFragment { currentFragment = it }
+                    LogonSelectedFragment.RestorePass -> RestorePassFragment(
+                        onLoadingStateChange = { loading = it },
+                        onCurrentFragmentChange = { currentFragment = it }
+                    )
                 }
             }
         }

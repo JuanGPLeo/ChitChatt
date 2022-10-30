@@ -1,6 +1,7 @@
 package com.jgpleo.chitchatt.logon.data.repository
 
 import com.jgpleo.chitchatt.logon.data.mapper.UserMapper
+import com.jgpleo.chitchatt.logon.data.mapper.mapRestorePassError
 import com.jgpleo.chitchatt.logon.data.mapper.mapSignInError
 import com.jgpleo.chitchatt.logon.data.mapper.mapSignUpError
 import com.jgpleo.chitchatt.logon.data.source.RemoteDataSource
@@ -84,7 +85,8 @@ class LogonRepositoryImp @Inject constructor(
                     eitherSuccess(Unit)
                 }
                 is State.Failed -> {
-                    eitherFailure(LogonRepositoryError.Unknown)
+                    val error = mapRestorePassError(state.error)
+                    eitherFailure(error)
                 }
             }
         }

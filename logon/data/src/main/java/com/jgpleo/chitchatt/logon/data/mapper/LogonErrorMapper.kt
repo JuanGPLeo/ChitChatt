@@ -22,3 +22,12 @@ fun mapSignUpError(error: FailureState): LogonRepositoryError {
         else -> LogonRepositoryError.Unknown
     }
 }
+
+fun mapRestorePassError(error: FailureState): LogonRepositoryError {
+    return when (error) {
+        is FailureState.InvalidUser -> LogonRepositoryError.InvalidUser
+        is FailureState.TooManyRequest -> LogonRepositoryError.Unknown
+        is FailureState.Unknown -> LogonRepositoryError.Unknown
+        else -> LogonRepositoryError.Unknown
+    }
+}
